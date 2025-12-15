@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
-import { PageLanding } from './components/pages/PageLanding';
+import DefaultPage from './components/pages/DefaultPage';
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<PageLanding />} />
+      <Route path="/" element={<DefaultPage />} />
     </Routes>
   );
 }

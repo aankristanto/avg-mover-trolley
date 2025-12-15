@@ -7,7 +7,7 @@ const theUrl = window.location.hostname;
 const instance = axios.create({
   withCredentials: true,
   // baseURL: `https://apirekrutmen.sumbiri.com`,
-  baseURL: `http://${theUrl}:5005`,
+  baseURL: `http://${theUrl}:5001`,
 });
 
 instance.interceptors.request.use(
