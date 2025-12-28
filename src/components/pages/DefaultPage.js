@@ -3,7 +3,7 @@ import { Container, Col, Row, Form, Card, Button } from "react-bootstrap";
 import TitleHeader from "../../TitleHeader";
 import axios from "../../api/api.js";
 import { FaCheck } from "react-icons/fa";
-
+import { toast } from "react-toastify";
 
 const DefaultPage = () => {
     const [ SelectedStation, setSelectedStation ] = useState({
@@ -93,6 +93,21 @@ const DefaultPage = () => {
         }
     }
 
+    const ClickMoveTrolley = async() => {
+        try {
+            const bodyData = {
+                trolleyCode: SelectedStation.TROLLEY_ID, 
+                lineCode: String(SelectedStation.STATION).substring(0,8)
+            };
+            const response = await axios.post('http://192.168.9.183:8890//ErpBindLineFinishBuffer', { bodyData });
+            if(response.data.code===200){
+                toast.success("Success set command to move trolley, please wait robot to prepare")
+            }
+        } catch(err){
+            toast.warning(err);
+        }
+    }
+
     useEffect(() => {
         getListStation();
     }, []);
@@ -175,7 +190,7 @@ const DefaultPage = () => {
                                                         </Col>
                                                         <Col sm={6}>
                                                             <div className="d-grid gap-2" style={{height:'30vh'}}>
-                                                                <Button variant="danger" size="lg" disabled={LogStationList.DESTINATION_STATUS}>
+                                                                <Button variant="danger" size="lg" disabled={LogStationList.DESTINATION_STATUS} onClick={ClickMoveTrolley}>
                                                                     { LogStationList.DESTINATION_STATUS ? <FaCheck /> : "" }
                                                                 </Button>
                                                             </div>
