@@ -93,20 +93,57 @@ const DefaultPage = () => {
         }
     }
 
-    const ClickMoveTrolley = async() => {
-        try {
-            const bodyData = {
-                trolleyCode: SelectedStation.TROLLEY_ID, 
-                lineCode: String(SelectedStation.STATION).substring(0,8)
-            };
-            const response = await axios.post('http://192.168.9.183:8890//ErpBindLineFinishBuffer', { bodyData });
-            if(response.data.code===200){
-                toast.success("Success set command to move trolley, please wait robot to prepare")
-            }
-        } catch(err){
-            toast.warning(err);
+    const ClickMoveTrolley = async () => {
+    let response = null;
+    let success = 0;
+    let message = null;
+
+    const trolleyCode = String(LogStationList?.TROLLEY_ID ?? "").slice(0, 6);
+    const lineCode = String(SelectedStation?.STATION ?? "").slice(0, 8);
+
+    try {
+        response = await axios.post(
+            'http://localhost:5001/agv/mover/action',
+            { trolleyCode, lineCode }, 
+        );
+
+        success = response.status === 200 ? 1 : 0;
+        message = response.data?.message;
+
+        if (success) {
+            toast.success("Success set command to move trolley");
         }
+
+    } catch (err) {
+        // Axios error response is HERE
+        success = 0;
+        message =
+            err?.response?.data?.msg ||
+            err?.response?.data?.message ||
+            err.message;
+
+        toast.warning("Failed to move trolley");
     }
+
+    console.log(response);
+
+    // ✅ ALWAYS executed
+    await axios.post("http://localhost:5001/agv/mover/log", {
+        TYPE: lineCode.slice(0, 3) === "STS" ? "sewingOutDrop" : "stagingPickup",
+        FROM_STATION_ID: lineCode,
+        TO_STATION_ID: lineCode,
+        BODY: JSON.stringify(message),
+        SUCCESS_STATUS: success,
+        TROLLEY_ID: trolleyCode
+    });
+
+    setLogStationList((prevData) => ({
+        ...prevData,
+            DESTINATION_STATUS: true,
+        }));
+};
+
+
 
     useEffect(() => {
         getListStation();
@@ -118,7 +155,7 @@ const DefaultPage = () => {
         }
     }, [SelectedStation.STATION, SelectedStation.LOCATION]);
 
-    console.log(LogStationList);
+    console.log(SelectedStation);
 
     return (
         <div>
