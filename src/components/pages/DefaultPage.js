@@ -6,7 +6,12 @@ import { FaCheck } from "react-icons/fa";
 
 
 const DefaultPage = () => {
-    const [ SelectedStation, setSelectedStation ] = useState({});
+    const [ SelectedStation, setSelectedStation ] = useState({
+        SITE: "",
+        LOCATION: "",
+        STATION: "",
+        LIST_STATION: [],
+    });
     const [ StationList, setStationList ] = useState([]);
     const [ LogStationList, setLogStationList ] = useState({});
 
@@ -49,7 +54,6 @@ const DefaultPage = () => {
                     const listSewingINDropReadyToMove = historyList.filter(log => log.TYPE==="sewingInDrop");
                     const listSewingOutPickup = historyList.filter(log => log.TYPE==="sewingOutPickup");
                     const dataList = {};
-                        
                     if(listSewingINDropReadyToMove.length > 0){
                         dataList.TROLLEY_ID = listSewingINDropReadyToMove[0].TROLLEY_ID;
                         dataList.ORIGIN_STATUS = listSewingINDropReadyToMove.length > 0 ? true : false;
@@ -57,9 +61,6 @@ const DefaultPage = () => {
                         setLogStationList(dataList);
                     }
                 }
-
-                
-                
             }
         } catch (error) {
             console.error("Error fetching station list:", error);
@@ -142,7 +143,6 @@ const DefaultPage = () => {
                                                     <option key={index} value={station.STATION_ID}>{station.STATION_ID}</option>
                                                 ))
                                             ) : null }
-                                            
                                         </Form.Select>
                                     </Col>
                                 </Row>
@@ -167,34 +167,19 @@ const DefaultPage = () => {
                                                     </Row>
                                                     <Row className="mt-4">
                                                         <Col sm={6}>
-                                                            <Card className="bg-primary" style={{height:'20vh'}}>
-                                                                <Card.Body>
-                                                                    <Row>
-                                                                        <Col sm={12}>
-                                                                            <div className="d-grid gap-2">
-                                                                                <Button variant="primary" size="lg" disabled={LogStationList.ORIGIN_STATUS}>
-                                                                                    { LogStationList.ORIGIN_STATUS ? <FaCheck /> : "" }
-                                                                                </Button>
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Row>
-                                                                </Card.Body>
-                                                            </Card>
+                                                            <div className="d-grid gap-2" style={{height:'30vh'}}>
+                                                                <Button variant="primary" size="lg" disabled={LogStationList.ORIGIN_STATUS}>
+                                                                    { LogStationList.ORIGIN_STATUS ? <FaCheck /> : "" }
+                                                                </Button>
+                                                            </div>
                                                         </Col>
                                                         <Col sm={6}>
-                                                            <Card className="bg-danger" style={{height:'20vh'}}>
-                                                                <Card.Body>
-                                                                    <Row>
-                                                                        <Col sm={12}>
-                                                                            <div className="d-grid gap-2">
-                                                                                <Button variant="danger" size="lg" disabled={LogStationList.DESTINATION_STATUS}>
-                                                                                    { LogStationList.DESTINATION_STATUS ? <FaCheck /> : "" }
-                                                                                </Button>
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Row>
-                                                                </Card.Body>
-                                                            </Card>
+                                                            <div className="d-grid gap-2" style={{height:'30vh'}}>
+                                                                <Button variant="danger" size="lg" disabled={LogStationList.DESTINATION_STATUS}>
+                                                                    { LogStationList.DESTINATION_STATUS ? <FaCheck /> : "" }
+                                                                </Button>
+                                                            </div>
+                                                    
                                                         </Col>
                                                     </Row>     
                                             </Card.Body>
@@ -213,4 +198,3 @@ const DefaultPage = () => {
 };
 
 export default DefaultPage;
-
