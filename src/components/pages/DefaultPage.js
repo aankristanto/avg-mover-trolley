@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Col, Row, Form, Card, Button } from "react-bootstrap";
+import { Container, Col, Row, Form, Card, Button, Table } from "react-bootstrap";
 import TitleHeader from "../../TitleHeader";
 import axios from "../../api/api.js";
 import { FaCheck } from "react-icons/fa";
@@ -13,8 +13,10 @@ const DefaultPage = () => {
         LIST_STATION: [],
     });
     const [firstSetup, setFirstSetup] = useState(false)
+    const [alreadyPickup, setAlreadyPickup] = useState(false)
     const [StationList, setStationList] = useState([]);
     const [LogStationList, setLogStationList] = useState({});
+    const [listSewingOut, setListSewingOut] = useState([])
 
     const getListStation = async () => {
         try {
@@ -41,12 +43,14 @@ const DefaultPage = () => {
                 if (location === "PREPARATION") {
                     const listPreparationINDropReadyToMove = historyList.filter(log => log.TYPE === "preparationInDrop");
                     const listPreparationOutDrop = historyList.filter(log => log.TYPE === "preparationOutDrop");
+
                     const dataList = {};
                     if (listPreparationINDropReadyToMove.length > 0 && listPreparationOutDrop.length === 0) {
                         dataList.TROLLEY_ID = listPreparationINDropReadyToMove[0].TROLLEY_ID;
                         dataList.TYPE = "Ready to Move";
                         dataList.SOURCE_TYPE = "preparationInDrop";
                         dataList.DESTINATION_TYPE = "preparationOutDrop";
+                        fetchSewingOut(dataList.TROLLEY_ID)
                         setLogStationList(dataList);
                     }
                 }
@@ -59,9 +63,14 @@ const DefaultPage = () => {
                         dataList.TROLLEY_ID = listSewingINDropReadyToMove[0].TROLLEY_ID;
                         dataList.ORIGIN_STATUS = listSewingINDropReadyToMove.length > 0 ? true : false;
                         dataList.DESTINATION_STATUS = listSewingOutPickup.length > 0 ? true : false;
+                        fetchSewingOut(dataList.TROLLEY_ID)
                         setLogStationList(dataList);
                     }
                 }
+                const alreadyPickUp = historyList.filter(log => log.TYPE === "packingInPickup");
+
+
+                setAlreadyPickup(alreadyPickUp.length > 0)
             }
         } catch (error) {
             console.error("Error fetching station list:", error);
@@ -95,46 +104,16 @@ const DefaultPage = () => {
     }
 
     const ClickMoveTrolley = async () => {
-        let response = null;
-        let success = 0;
-        let message = null;
-
         const trolleyCode = String(LogStationList?.TROLLEY_ID ?? "").slice(0, 6);
         const lineCode = String(SelectedStation?.STATION ?? "").slice(0, 8);
 
         try {
-            response = await axios.post(
-                '/mover/action',
-                { trolleyCode, lineCode },
-            );
+            await axios.post('/mover/action', { trolleyCode, lineCode });
 
-            success = response.status === 200 ? 1 : 0;
-            message = response.data?.message;
-
-            if (success) {
-                toast.success("Success set command to move trolley");
-            }
-
+            toast.success("Success set command to move trolley");
         } catch (err) {
-            success = 0;
-            message =
-                err?.response?.data?.msg ||
-                err?.response?.data?.message ||
-                err.message;
-
             toast.warning("Failed to move trolley");
         }
-
-
-        await axios.post("/mover/log", {
-            TYPE: lineCode.slice(0, 3) === "STS" ? "sewingOutDrop" : "stagingPickup",
-            FROM_STATION_ID: lineCode,
-            TO_STATION_ID: lineCode,
-            BODY: JSON.stringify(message),
-            SUCCESS_STATUS: success,
-            TROLLEY_ID: trolleyCode
-        });
-
         setLogStationList((prevData) => ({
             ...prevData,
             DESTINATION_STATUS: true,
@@ -147,12 +126,42 @@ const DefaultPage = () => {
         setFirstSetup(false)
     }
 
+    const fetchSewingOut = async (trolleyCode) => {
+        try {
+            const { data } = await axios.get(`/sewing/out`, { params: { TROLLEY_ID: trolleyCode } })
+            setListSewingOut(data.data)
+        } catch (err) {
+            toast.error(err?.response?.data?.message || "Filed to fetch bundle swing out")
+        }
+    }
+
+    const sendToPacking = async () => {
+        if (listSewingOut.length <= 0) {
+            return toast.warn("Please fill bundle sewing out first")
+        }
+        try {
+            const trolleyCode = String(LogStationList?.TROLLEY_ID ?? "").slice(0, 6);
+            const lineCode = String(SelectedStation?.STATION ?? "").slice(0, 8);
+
+            await axios.post(`/sewing/send-to-packing`, { trolleyCode, lineCode })
+            toast.success("Success call AGV To Pickup this trolley to Packing")
+            setAlreadyPickup(true)
+        } catch (err) {
+            toast.error(err?.response?.data?.message || "Filed to send trolley to packing")
+        }
+    }
+
     useEffect(() => {
         const strg = localStorage.getItem('default_key')
         if (strg) {
             setFirstSetup(false)
             const data = JSON.parse(strg)
             getListLogByStation(data.STATION, data.LOCATION)
+            setSelectedStation(prev => ({
+                ...prev,
+                STATION: data.STATION,
+                LOCATION: data.LOCATION,
+            }))
         } else {
             setFirstSetup(true)
             getListStation();
@@ -200,7 +209,7 @@ const DefaultPage = () => {
                                                 ) : null}
                                             </Form.Select>
                                         </Col>
-                                        <Col sm={12} md={3} style={{display: 'flex', alignItems: 'flex-end'}}>
+                                        <Col sm={12} md={3} style={{ display: 'flex', alignItems: 'flex-end' }}>
                                             <Button variant="primary" className="px-4" onClick={handleConfirmState}>Confirm</Button>
                                         </Col>
                                     </Row>
@@ -236,7 +245,6 @@ const DefaultPage = () => {
                                                                         {LogStationList.DESTINATION_STATUS ? <FaCheck /> : ""}
                                                                     </Button>
                                                                 </div>
-
                                                             </Col>
                                                         </Row>
                                                     </Card.Body>
@@ -246,6 +254,63 @@ const DefaultPage = () => {
                                     </Row>
                                 </Card.Body>
                             </Card>
+                        </Col>
+                        <Col sm={12} className="mt-3">
+                            <Card>
+                                <Card.Header>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                        <Card.Title>Bundle Sewing Out</Card.Title>
+                                        <Button variant="warning" onClick={() => fetchSewingOut(LogStationList.TROLLEY_ID)}>Reload</Button>
+                                    </div>
+                                </Card.Header>
+                                <Card.Body>
+                                    <div className="table-responsive">
+                                        <Table
+                                            striped
+                                            bordered
+                                            hover
+                                            size="sm"
+                                            className="align-middle text-center"
+                                        >
+                                            <thead className="table-dark">
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Trolley ID</th>
+                                                    <th>Barcode Serial</th>
+                                                    <th>Barcode Main</th>
+                                                    <th>Location</th>
+                                                    <th>Scan Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {listSewingOut?.length > 0 ? (
+                                                    listSewingOut.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td>{index + 1}</td>
+                                                            <td>{item.TROLLEY_ID}</td>
+                                                            <td>{item.BARCODE_SERIAL}</td>
+                                                            <td>{item.BARCODE_MAIN}</td>
+                                                            <td>{item.SEWING_SCAN_LOCATION}</td>
+                                                            <td>
+                                                                {new Date(item.SEWING_SCAN_TIME).toLocaleString()}
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan="9" className="text-muted">
+                                                            Data tidak tersedia
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </Table>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        <Col sm={12} className="my-3">
+                            {LogStationList.DESTINATION_STATUS && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
                         </Col>
                     </Row>
                 }
