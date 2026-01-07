@@ -23,6 +23,7 @@
     "react-router-dom": "^7.10.1",
     "react-scripts": "5.0.1",
     "react-toastify": "^11.0.5",
+    "sweetalert2": "^11.26.17",
     "use-interval": "^1.4.0",
     "web-vitals": "^5.1.0"
   },

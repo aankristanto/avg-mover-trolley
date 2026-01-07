@@ -4,6 +4,7 @@ import TitleHeader from "../../TitleHeader";
 import axios from "../../api/api.js";
 import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const DefaultPage = () => {
     const [SelectedStation, setSelectedStation] = useState({
@@ -68,8 +69,6 @@ const DefaultPage = () => {
                     }
                 }
                 const alreadyPickUp = historyList.filter(log => log.TYPE === "packingInPickup");
-
-
                 setAlreadyPickup(alreadyPickUp.length >= 1)
             }
         } catch (error) {
@@ -139,6 +138,17 @@ const DefaultPage = () => {
         if (listSewingOut.length <= 0) {
             return toast.warn("Please fill bundle sewing out first")
         }
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            reverseButtons: true,
+        });
+        if (!result.isConfirmed) return
         try {
             const trolleyCode = String(LogStationList?.TROLLEY_ID ?? "").slice(0, 6);
             const lineCode = String(SelectedStation?.STATION ?? "").slice(0, 8);
@@ -310,7 +320,7 @@ const DefaultPage = () => {
                             </Card>
                         </Col>
                         <Col sm={12} className="my-3">
-                            {!LogStationList.DESTINATION_STATUS && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
+                            {LogStationList.DESTINATION_STATUS && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
                         </Col>
                     </Row>
                 }

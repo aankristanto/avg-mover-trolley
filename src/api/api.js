@@ -3,11 +3,11 @@ import {
   loadProgressBar
 } from "axios-progress-bar";
 
-const theUrl = window.location.hostname;
+// const theUrl = window.location.hostname;
 const instance = axios.create({
   withCredentials: true,
-  // baseURL: `https://api.sumbiri.com/agv`,
-  baseURL: `http://${theUrl}:5001/agv`,
+  baseURL: `https://api.sumbiri.com/agv`,
+  // baseURL: `http://${theUrl}:5001/agv`,
 });
 
 instance.interceptors.request.use(
