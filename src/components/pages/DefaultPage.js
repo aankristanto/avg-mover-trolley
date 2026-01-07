@@ -15,6 +15,7 @@ const DefaultPage = () => {
     });
     const [firstSetup, setFirstSetup] = useState(false)
     const [alreadyPickup, setAlreadyPickup] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [StationList, setStationList] = useState([]);
     const [LogStationList, setLogStationList] = useState({});
     const [listSewingOut, setListSewingOut] = useState([])
@@ -135,6 +136,8 @@ const DefaultPage = () => {
     }
 
     const sendToPacking = async () => {
+        if (loading) return
+
         if (listSewingOut.length <= 0) {
             return toast.warn("Please fill bundle sewing out first")
         }
@@ -149,6 +152,7 @@ const DefaultPage = () => {
             reverseButtons: true,
         });
         if (!result.isConfirmed) return
+        setLoading(true)
         try {
             const trolleyCode = String(LogStationList?.TROLLEY_ID ?? "").slice(0, 6);
             const lineCode = String(SelectedStation?.STATION ?? "").slice(0, 8);
@@ -156,7 +160,9 @@ const DefaultPage = () => {
             await axios.post(`/sewing/send-to-packing`, { trolleyCode, lineCode })
             toast.success("Success call AGV To Pickup this trolley to Packing")
             setAlreadyPickup(true)
+            setLoading(false)
         } catch (err) {
+            setLoading(false)
             toast.error(err?.response?.data?.message || "Filed to send trolley to packing")
         }
     }
@@ -320,7 +326,7 @@ const DefaultPage = () => {
                             </Card>
                         </Col>
                         <Col sm={12} className="my-3">
-                            {LogStationList.DESTINATION_STATUS && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
+                            {LogStationList.DESTINATION_STATUS && !alreadyPickup && <Button variant="success" disabled={loading} style={{ width: '100%' }} onClick={sendToPacking}>{loading ? 'Loading...' : 'Send To Packing'}</Button>}
                         </Col>
                     </Row>
                 }
