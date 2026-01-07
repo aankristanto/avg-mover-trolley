@@ -23,6 +23,11 @@ const TitleHeader = ({ title }) => {
     setCurrentTime(time);
   };
 
+  const handleRefresh = () => {
+    localStorage.removeItem("default_key") 
+    window.location.reload()
+  }
+
   useInterval(() => {
     updateTime();
   }, 1000);
@@ -36,6 +41,7 @@ const TitleHeader = ({ title }) => {
             src="/images/logo.png"
             height="50"
             className="d-inline-block align-top"
+            onClick={handleRefresh}
             />
             <p className="text fs-5 fw-bold mb-0 d-flex align-items-center">&nbsp; {title}</p>
         </InputGroup>
