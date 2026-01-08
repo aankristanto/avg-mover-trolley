@@ -16,6 +16,7 @@ const DefaultPage = () => {
     const [firstSetup, setFirstSetup] = useState(false)
     const [alreadyPickup, setAlreadyPickup] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [loading2, setLoading2] = useState(false)
     const [StationList, setStationList] = useState([]);
     const [LogStationList, setLogStationList] = useState({});
     const [listSewingOut, setListSewingOut] = useState([])
@@ -104,15 +105,18 @@ const DefaultPage = () => {
     }
 
     const ClickMoveTrolley = async () => {
+        if (loading2) return
         const trolleyCode = String(LogStationList?.TROLLEY_ID ?? "").slice(0, 6);
         const lineCode = String(SelectedStation?.STATION ?? "").slice(0, 8);
 
+        setLoading2(true)
         try {
             await axios.post('/mover/action', { trolleyCode, lineCode });
-
             toast.success("Success set command to move trolley");
+            setLoading2(false)
         } catch (err) {
             toast.warning("Failed to move trolley");
+            setLoading2(false)
         }
         setLogStationList((prevData) => ({
             ...prevData,
