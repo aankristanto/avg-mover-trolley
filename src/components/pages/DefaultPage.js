@@ -113,15 +113,15 @@ const DefaultPage = () => {
         try {
             await axios.post('/mover/action', { trolleyCode, lineCode });
             toast.success("Success set command to move trolley");
+            setLogStationList((prevData) => ({
+                ...prevData,
+                DESTINATION_STATUS: true,
+            }));
             setLoading2(false)
         } catch (err) {
             toast.warning("Failed to move trolley");
             setLoading2(false)
         }
-        setLogStationList((prevData) => ({
-            ...prevData,
-            DESTINATION_STATUS: true,
-        }));
     };
 
     const handleConfirmState = () => {
