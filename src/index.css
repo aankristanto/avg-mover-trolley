@@ -11,3 +11,102 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.station-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eaeef4;
+  transition: all 0.25s ease;
+}
+
+.station-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.station-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.station-id {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+  letter-spacing: -0.3px;
+}
+
+.station-location-badge {
+  background: #e6f0ff;
+  color: #1e40af;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.station-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.station-detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.station-detail-label {
+  font-size: 0.8rem;
+  color: #718096;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.station-detail-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.station-status-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.station-status-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.station-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.station-status-active .station-status-dot {
+  background-color: #48bb78; /* hijau */
+}
+
+.station-status-inactive .station-status-dot {
+  background-color: #e53e3e; /* merah */
+}
+
+.station-site-name {
+  font-weight: 600;
+  color: #2b6cb0;
+  font-size: 0.95rem;
+}
