@@ -42,14 +42,14 @@ const DefaultPage = () => {
             const data = data2.data
 
             setLogStationList({
-                TROLLEY_ID: data.TROLLEY.TROLLEY_ID,
+                TROLLEY_ID: data?.TROLLEY?.TROLLEY_ID,
                 TROLLEY: data.TROLLEY,
                 STATION: data.STATION,
                 ORIGIN_STATUS: data.IS_SEWING_IN,
                 DESTINATION_STATUS: data.IS_SEWING_OUT
             });
-            setListSewingOut(data.SEWING_OUT)
 
+            setListSewingOut(data.SEWING_OUT)
             setAlreadyPickup(data.IS_PACKING_IN)
         } catch (error) {
             console.error("Error fetching station list:", error);
