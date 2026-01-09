@@ -213,7 +213,7 @@ const DefaultPage = () => {
                         <Col sm={12} className="mt-3">
                             <div className="station-card">
                                 <div className="station-header">
-                                    <div className="station-id">{LogStationList?.STATION?.STATION_ID}</div>
+                                    <div className="station-id">{LogStationList?.STATION?.STATION_ID} | {LogStationList?.STATION?.STATION_NAME}</div>
                                     <span className="station-location-badge">{LogStationList?.STATION?.STATION_LOCATION}</span>
                                 </div>
 
@@ -255,7 +255,7 @@ const DefaultPage = () => {
                             <>
                                 <Col sm={12} className="mt-3">
                                     <Card>
-                                        <Card.Header as="h5" className="bg-success text-white">Trolley at Selected Station</Card.Header>
+                                        <Card.Header ><Card.Title>Trolley at Selected Station</Card.Title></Card.Header>
                                         <Card.Body>
                                             <Row>
                                                 <Col sm={12} className="mb-3">
@@ -273,13 +273,16 @@ const DefaultPage = () => {
                                                                             {LogStationList.ORIGIN_STATUS ? <FaCheck /> : ""}
                                                                         </Button>
                                                                     </div>
+                                                                    <p className="text-center my-0 mt-2" style={{color: 'gray', fontSize: 13}}>Loading</p>
                                                                 </Col>
                                                                 <Col sm={6}>
                                                                     <div className="d-grid gap-2" style={{ height: '30vh' }}>
                                                                         <Button variant="danger" size="lg" disabled={LogStationList.DESTINATION_STATUS} onClick={ClickMoveTrolley}>
                                                                             {LogStationList.DESTINATION_STATUS ? <FaCheck /> : ""}
                                                                         </Button>
+                                                                        
                                                                     </div>
+                                                                    <p className="text-center my-0 mt-2" style={{color: 'gray', fontSize: 13}}>Finish Good</p>
                                                                 </Col>
                                                             </Row>
                                                         </Card.Body>
@@ -345,8 +348,8 @@ const DefaultPage = () => {
                                 <Col sm={12} className="my-3">
                                     {LogStationList.DESTINATION_STATUS && !alreadyPickup && <Button variant="success" disabled={loading} style={{ width: '100%' }} onClick={sendToPacking}>{loading ? 'Loading...' : 'Send To Packing'}</Button>}
                                 </Col>
-                            </>) : <Col sm={12} className="mt-3">
-                            <h2 className="text-center">No trolley available</h2>
+                            </>) : <Col sm={12}>
+                            <h2 className="text-center" style={{marginTop: '50px'}}>No trolley available</h2>
                         </Col>
                         }
                     </Row>
