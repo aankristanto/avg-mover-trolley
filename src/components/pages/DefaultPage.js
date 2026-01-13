@@ -197,7 +197,7 @@ const DefaultPage = () => {
                                                 <option disabled selected> </option>
                                                 {SelectedStation.LIST_STATION && SelectedStation.LIST_STATION.length > 0 ? (
                                                     SelectedStation.LIST_STATION.map((station, index) => (
-                                                        <option key={index} value={station.STATION_ID}>{station.STATION_ID}</option>
+                                                        <option key={index} value={station.STATION_ID}>{station.STATION_NAME}</option>
                                                     ))
                                                 ) : null}
                                             </Form.Select>
