@@ -134,6 +134,20 @@ const DefaultPage = () => {
         }
     }
 
+    const formatDate = (date) => {
+
+
+        const dateFormatter = new Intl.DateTimeFormat('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+
+
+        const formattedDate = dateFormatter.format(date);
+        return formattedDate
+    }
+
     useEffect(() => {
         const strg = localStorage.getItem('default_key')
         if (strg) {
@@ -273,16 +287,16 @@ const DefaultPage = () => {
                                                                             {LogStationList.ORIGIN_STATUS ? <FaCheck /> : ""}
                                                                         </Button>
                                                                     </div>
-                                                                    <p className="text-center my-0 mt-2" style={{color: 'gray', fontSize: 13}}>Loading</p>
+                                                                    <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Loading</p>
                                                                 </Col>
                                                                 <Col sm={6}>
                                                                     <div className="d-grid gap-2" style={{ height: '30vh' }}>
                                                                         <Button variant="danger" size="lg" disabled={LogStationList.DESTINATION_STATUS} onClick={ClickMoveTrolley}>
                                                                             {LogStationList.DESTINATION_STATUS ? <FaCheck /> : ""}
                                                                         </Button>
-                                                                        
+
                                                                     </div>
-                                                                    <p className="text-center my-0 mt-2" style={{color: 'gray', fontSize: 13}}>Finish Good</p>
+                                                                    <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Finish Good</p>
                                                                 </Col>
                                                             </Row>
                                                         </Card.Body>
@@ -328,7 +342,7 @@ const DefaultPage = () => {
                                                                     <td>{item.BARCODE_MAIN}</td>
                                                                     <td>{item.SEWING_SCAN_LOCATION}</td>
                                                                     <td>
-                                                                        {new Date(item.SEWING_SCAN_TIME).toLocaleString()}
+                                                                        {item.SEWING_SCAN_TIME ? formatDate(new Date(item.SEWING_SCAN_TIME)) : ''}
                                                                     </td>
                                                                 </tr>
                                                             ))
@@ -349,7 +363,7 @@ const DefaultPage = () => {
                                     {LogStationList.DESTINATION_STATUS && !alreadyPickup && <Button variant="success" disabled={loading} style={{ width: '100%' }} onClick={sendToPacking}>{loading ? 'Loading...' : 'Send To Packing'}</Button>}
                                 </Col>
                             </>) : <Col sm={12}>
-                            <h2 className="text-center" style={{marginTop: '50px'}}>No trolley available</h2>
+                            <h2 className="text-center" style={{ marginTop: '50px' }}>No trolley available</h2>
                         </Col>
                         }
                     </Row>
