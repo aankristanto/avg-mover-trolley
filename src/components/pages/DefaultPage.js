@@ -5,6 +5,8 @@ import axios from "../../api/api.js";
 import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+
 
 const DefaultPage = () => {
     const [SelectedStation, setSelectedStation] = useState({
@@ -20,7 +22,8 @@ const DefaultPage = () => {
     const [StationList, setStationList] = useState([]);
     const [LogStationList, setLogStationList] = useState({});
     const [listSewingOut, setListSewingOut] = useState([])
-
+    const navigate = useNavigate();
+    
     const getListStation = async () => {
         try {
             const response = await axios.get(`/station/`);
@@ -167,6 +170,9 @@ const DefaultPage = () => {
     const getStatusClass = (status) => (status === 1 ? "station-status-active" : "station-status-inactive");
     const getStatusText = (status) => (status === 1 ? "Active" : "Inactive");
 
+    const handleRequestEmptyTrolley = () => {
+        navigate(`/req-empty-trolley?SITE=${SelectedStation.SITE}&STATION=${SelectedStation.STATION}`);
+    };
 
     return (
         <div>
@@ -202,8 +208,13 @@ const DefaultPage = () => {
                                                 ) : null}
                                             </Form.Select>
                                         </Col>
-                                        <Col sm={12} md={3} style={{ display: 'flex', alignItems: 'flex-end' }}>
-                                            <Button variant="primary" className="px-4" onClick={handleConfirmState}>Confirm</Button>
+                                        <Col sm={12} md={4} className="d-flex align-items-end gap-2">
+                                            <Button variant="primary" className="px-4" onClick={handleConfirmState}>
+                                                Confirm
+                                            </Button>
+                                            <Button variant="secondary" className="px-4" onClick={handleRequestEmptyTrolley} disabled={SelectedStation.STATION===""}>
+                                                Req Empty Trolley
+                                            </Button>
                                         </Col>
                                     </Row>
                                 </Card.Body>
