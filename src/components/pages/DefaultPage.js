@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Container, Col, Row, Form, Card, Button, Table } from "react-bootstrap";
 import TitleHeader from "../../TitleHeader";
 import axios from "../../api/api.js";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaLocationArrow } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
-
+import moment from "moment";
 
 const DefaultPage = () => {
     const [SelectedStation, setSelectedStation] = useState({
@@ -21,8 +20,8 @@ const DefaultPage = () => {
     const [loading2, setLoading2] = useState(false)
     const [StationList, setStationList] = useState([]);
     const [LogStationList, setLogStationList] = useState({});
-    const [listSewingOut, setListSewingOut] = useState([])
-    const navigate = useNavigate();
+    const [listSewingOut, setListSewingOut] = useState([]);
+    const [LogHistory, setLogHistory] = useState([]);
     
     const getListStation = async () => {
         try {
@@ -38,6 +37,8 @@ const DefaultPage = () => {
             console.error("Error fetching station list:", error);
         }
     };
+
+
 
     const getListLogByStation = async (id) => {
         try {
@@ -184,9 +185,48 @@ const DefaultPage = () => {
     const getStatusClass = (status) => (status === 1 ? "station-status-active" : "station-status-inactive");
     const getStatusText = (status) => (status === 1 ? "Active" : "Inactive");
 
-    const handleRequestEmptyTrolley = () => {
-        navigate(`/req-empty-trolley?SITE=${SelectedStation.SITE}&STATION=${SelectedStation.STATION}`);
-    };
+   
+    const postRequestTrolley = async() => {
+            const dataRequest = {
+                STATION_ID: SelectedStation.STATION
+            };
+            const tryPost = await axios.post('/mover/log-empty-trolley-req', { dataRequest});
+            if(tryPost){
+                toast.success("Success request Empty Trolley");
+                // await getLogHistoryEmptyTrolleyRequest(moment().format('YYYY-MM-DD'));
+            } else {
+                toast.warning("Failed to request Empty Trolley");
+            }
+    }
+
+   const getLogHistoryEmptyTrolleyRequest = async(date) => {
+        try {
+            const response = await axios.get(`/mover/log-empty-trolley-req/${date}`);
+            if (response.status === 200) {
+                setLogHistory(response.data.data);
+            }
+
+        } catch(err){
+            console.error('Error fetching log history');
+        }
+    }
+
+    useEffect(() => {
+            getListStation();
+            getLogHistoryEmptyTrolleyRequest(moment().format('YYYY-MM-DD'));
+    }, []);
+    
+    useEffect(() => {
+        
+        const interval = setInterval(() => {
+            getLogHistoryEmptyTrolleyRequest(moment().format('YYYY-MM-DD'));
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, []);
+    
+
+    
 
     return (
         <div>
@@ -226,9 +266,7 @@ const DefaultPage = () => {
                                             <Button variant="primary" className="px-4" onClick={handleConfirmState}>
                                                 Confirm
                                             </Button>
-                                            <Button variant="secondary" className="px-4" onClick={handleRequestEmptyTrolley} disabled={SelectedStation.STATION===""}>
-                                                Req Empty Trolley
-                                            </Button>
+                                            
                                         </Col>
                                     </Row>
                                 </Card.Body>
@@ -370,14 +408,80 @@ const DefaultPage = () => {
                                         </Card.Body>
                                     </Card>
                                 </Col>
+                                
                                 <Col sm={12} className="my-3">
                                     {LogStationList.DESTINATION_STATUS && !alreadyPickup && <Button variant="success" disabled={loading} style={{ width: '100%' }} onClick={sendToPacking}>{loading ? 'Loading...' : 'Send To Packing'}</Button>}
                                 </Col>
-                            </>) : <Col sm={12}>
-                            <h2 className="text-center" style={{ marginTop: '50px' }}>No trolley available</h2>
-                        </Col>
+                            </>) : 
+                            <>
+                            <Col sm={12}>
+                                <h2 className="text-center" style={{marginTop: '50px'}}>No trolley available</h2>
+                            </Col>
+                            <Col sm={12} className="mt-3">
+                                <Card>
+                                    <Card.Header
+                                        as="h5"
+                                        className="bg-dark text-white d-flex justify-content-between align-items-center"
+                                        >
+                                        <span>Empty Trolley Request History</span>
+
+                                        <Button
+                                            variant="warning"
+                                            onClick={postRequestTrolley}
+                                            disabled={LogStationList?.TROLLEY?.MASTER_TROLLEY_ID}
+                                        >
+                                            <FaLocationArrow className="me-2" />
+                                            REQUEST EMPTY TROLLEY
+                                        </Button>
+                                    </Card.Header>
+
+                                    <Card.Body>
+                                        <Row>
+                                            <Col sm={12} md={4} lg={3}>
+                                                
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col sm={12} md={12}>
+                                                <Table variant="secondary" bordered>
+                                                    <thead>
+                                                        <tr className="text-center">
+                                                            <th>Req Time</th>
+                                                            <th>Site</th>
+                                                            <th>Station</th>
+                                                            <th>Confirm Status</th>
+                                                            <th>Confirm Time</th>
+                                                            <th>Trolley ID</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        { LogHistory?.length > 0 ? (
+                                                            LogHistory.filter((x => x.STATION_ID===SelectedStation.STATION)).map((item, index) => (
+                                                                <tr key={index}>
+                                                                    <td className="text-center">{moment(item?.REQUEST_TIME).format('YYYY-MM-DD HH:mm:ss')}</td>
+                                                                    <td className="text-center">{item?.SITE_NAME}</td>
+                                                                    <td className="text-center">{item?.STATION_ID}</td>
+                                                                    <td className="text-center">{item?.CONFIRM_STATUS === 'Y' ? <FaCheck/> : ""}</td>
+                                                                    <td className="text-center">{item?.CONFIRM_TIME ? moment(item?.CONFIRM_TIME).format('YYYY-MM-DD HH:mm:ss') : ''}</td>
+                                                                    <td className="text-center">{item?.TROLLEY_ID}</td>
+                                                                </tr>
+                                                            ))
+                                                            ) : (
+                                                                <tr>
+                                                                    <td colSpan={6}>No History</td>
+                                                                </tr>    
+                                                        )}
+                                                    </tbody>
+                                                </Table>
+                                            </Col>
+                                        </Row>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                            </>
                         }
                     </Row>
+                    
 
                 }
             </Container>
