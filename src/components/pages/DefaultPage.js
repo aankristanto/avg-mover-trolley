@@ -109,9 +109,7 @@ const DefaultPage = () => {
     const sendToPacking = async () => {
         if (loading) return
 
-        if (listSewingOut.length <= 0) {
-            return toast.warn("Please fill bundle sewing out first")
-        }
+ 
         const result = await Swal.fire({
             title: "Are you sure?",
             icon: "question",
