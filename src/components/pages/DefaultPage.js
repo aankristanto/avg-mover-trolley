@@ -6,6 +6,7 @@ import { FaCheck, FaLocationArrow } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import moment from "moment";
+import OperationDayCard from "../cardLimit/OperationDayCard.js";
 
 const DefaultPage = () => {
     const [SelectedStation, setSelectedStation] = useState({
@@ -22,6 +23,8 @@ const DefaultPage = () => {
     const [LogStationList, setLogStationList] = useState({});
     const [listSewingOut, setListSewingOut] = useState([]);
     const [LogHistory, setLogHistory] = useState([]);
+          const [todayData, setTodayData] = useState(null);
+
     
     const getListStation = async () => {
         try {
@@ -38,7 +41,14 @@ const DefaultPage = () => {
         }
     };
 
-
+    const fetchOperationDay = async () => {
+        try {
+            const { data } = await axios.get('/operation-day/today');
+            setTodayData(data.data);
+        } catch (err) {
+            toast.error(err?.response?.data?.message || 'Failed to fetch operation day');
+        }
+    };
 
     const getListLogByStation = async (id) => {
         try {
@@ -94,7 +104,7 @@ const DefaultPage = () => {
             }));
             setLoading2(false)
         } catch (err) {
-            toast.warning("Failed to move trolley");
+            toast.warning(err?.response?.data?.message || "Failed to move trolley");
             setLoading2(false)
         }
     };
@@ -151,6 +161,7 @@ const DefaultPage = () => {
     }
 
     useEffect(() => {
+        fetchOperationDay()
         const strg = localStorage.getItem('default_key')
         if (strg) {
             setFirstSetup(false)
@@ -185,6 +196,7 @@ const DefaultPage = () => {
 
    
     const postRequestTrolley = async() => {
+        try {
             const dataRequest = {
                 STATION_ID: SelectedStation.STATION
             };
@@ -195,6 +207,10 @@ const DefaultPage = () => {
             } else {
                 toast.warning("Failed to request Empty Trolley");
             }
+        } catch (err) {
+            toast.error(err?.response?.data?.message || "Filed to send trolley to packing")
+        }
+            
     }
 
    const getLogHistoryEmptyTrolleyRequest = async(date) => {
@@ -272,6 +288,10 @@ const DefaultPage = () => {
                         </Col>
                     </Row> : <Row>
                         <Col sm={12} className="mt-3">
+                        <OperationDayCard
+                                    data={todayData}
+                                    showEndTime={true}
+                                />
                             <div className="station-card">
                                 <div className="station-header">
                                     <div className="station-id">{LogStationList?.STATION?.STATION_ID} | {LogStationList?.STATION?.STATION_NAME}</div>
