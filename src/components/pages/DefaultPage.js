@@ -104,7 +104,7 @@ const DefaultPage = () => {
             }));
             setLoading2(false)
         } catch (err) {
-            toast.warning(err?.response?.data?.message || "Failed to move trolley");
+            toast.error(err?.response?.data?.message || "Failed to move trolley");
             setLoading2(false)
         }
     };
