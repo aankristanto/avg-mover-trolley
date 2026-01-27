@@ -2,7 +2,7 @@ import React from 'react';
 import './operationDayCard.css';
 
 const OperationDayCard = ({
-  data,
+  data = [], // array of assignment records
   layout = 'horizontal', // 'vertical' | 'horizontal'
   showTitle = false,
   showEndTime = false,
@@ -10,7 +10,7 @@ const OperationDayCard = ({
   showLineTolerance = false,
   showPackingTolerance = false,
 }) => {
-  if (!data) return null;
+  if (!Array.isArray(data) || data.length === 0) return null;
 
   const formatTime = (timeStr) => {
     if (!timeStr) return '–';
@@ -18,34 +18,58 @@ const OperationDayCard = ({
   };
 
   const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-  const dayName = dayNames[data.DAY] || `Hari ${data.DAY}`;
 
-  const timeItems = [
-    { label: 'Start Time', value: formatTime(data.START_TIME), show: true },
-    { label: 'End Time', value: formatTime(data.END_TIME), show: showEndTime },
-    { label: 'Empty trolley MAX', value: formatTime(data.EMPTY_TOLERANCE), show: showEmptyTolerance },
-    { label: 'Line MAX', value: formatTime(data.LINE_TOLERANCE), show: showLineTolerance },
-    { label: 'Packing MAX', value: formatTime(data.PACKING_TOLERANCE), show: showPackingTolerance },
-  ].filter(item => item.show);
+  const uniqueDays = [...new Set(data.map(item => item.AGV_OPERATION_DAY.DAY))];
 
   return (
     <div className="operation-day-wrapper">
       {showTitle && <h2 className="operation-day-section-title">Operation Day</h2>}
-      <div className={`operation-day-card operation-day-card--${layout}`}>
-        <div className="operation-day-header">
-          <h3 className="operation-day-title">{dayName}</h3>
-          {data.NOTE && <p className="operation-day-note">{data.NOTE}</p>}
-        </div>
+      
+      {uniqueDays.map((day) => {
+        const dayItems = data.filter(item => item.AGV_OPERATION_DAY.DAY === day);
+        const firstItem = dayItems[0]?.AGV_OPERATION_DAY;
+        const dayName = dayNames[day] || `Hari ${day}`;
 
-        <div className={`operation-day-times operation-day-times--${layout}`}>
-          {timeItems.map((item, index) => (
-            <div key={index} className="operation-day-time-item">
-              <span className="operation-day-label">{item.label}</span>
-              <span className="operation-day-value">{item.value}</span>
+        return (
+          <div key={day} className={`operation-day-card operation-day-card--${layout}`}>
+            <div className={`operation-day-shifts operation-day-shifts--${layout}`}>
+              <div className="operation-day-header">
+              <h3 className="operation-day-title">{dayName}</h3>
+              {firstItem?.NOTE && <p className="operation-day-note">{firstItem.NOTE}</p>}
             </div>
-          ))}
-        </div>
-      </div>
+              {dayItems.map((item, idx) => {
+                const op = item.AGV_OPERATION_DAY;
+                const timeItems = [
+                  { label: 'Start Time', value: formatTime(op.START_TIME), show: true },
+                  { label: 'End Time', value: formatTime(op.END_TIME), show: showEndTime },
+                  { label: 'Empty trolley MAX', value: formatTime(op.EMPTY_TOLERANCE), show: showEmptyTolerance },
+                  { label: 'Line MAX', value: formatTime(op.LINE_TOLERANCE), show: showLineTolerance },
+                  { label: 'Packing MAX', value: formatTime(op.PACKING_TOLERANCE), show: showPackingTolerance },
+                ].filter(t => t.show);
+
+                return (
+                  <div key={idx} className="operation-day-shift-item">
+                    
+                    <div className="operation-day-shift-badge">
+                      {op.SHIFT || 'Shift'}
+                    </div>
+
+                    
+                    <div className={`operation-day-times operation-day-times--${layout}`}>
+                      {timeItems.map((t, i) => (
+                        <div key={i} className="operation-day-time-item">
+                          <span className="operation-day-label">{t.label}</span>
+                          <span className="operation-day-value">{t.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };

@@ -41,9 +41,9 @@ const DefaultPage = () => {
         }
     };
 
-    const fetchOperationDay = async () => {
+    const fetchOperationDay = async (code) => {
         try {
-            const { data } = await axios.get('/operation-day/today');
+            const { data } = await axios.get('/operation-day/v2-list-today', {params: {BUILDING_CODE: code}});
             setTodayData(data.data);
         } catch (err) {
             toast.error(err?.response?.data?.message || 'Failed to fetch operation day');
@@ -54,7 +54,7 @@ const DefaultPage = () => {
         try {
             const { data: data2 } = await axios.get(`/station/spesific/${id}`);
             const data = data2.data
-
+            fetchOperationDay(data?.STATION?.SITE_NAME)
             setLogStationList({
                 TROLLEY_ID: data?.TROLLEY?.TROLLEY_ID,
                 TROLLEY: data.TROLLEY,
@@ -161,7 +161,6 @@ const DefaultPage = () => {
     }
 
     useEffect(() => {
-        fetchOperationDay()
         const strg = localStorage.getItem('default_key')
         if (strg) {
             setFirstSetup(false)

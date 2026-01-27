@@ -1,4 +1,3 @@
-
 .operation-day-wrapper {
   width: 100%;
   margin: 0 auto 24px;
@@ -13,7 +12,6 @@
   border-left: 4px solid #2b6cb0;
 }
 
-
 .operation-day-card {
   background: #ffffff;
   border-radius: 16px;
@@ -23,6 +21,7 @@
   border: 1px solid #f0f0f0;
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .operation-day-card:hover {
@@ -30,83 +29,9 @@
   transform: translateY(-2px);
 }
 
-
-.operation-day-card--vertical {
-  max-width: 360px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.operation-day-times--vertical {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-top: 16px;
-}
-
-
-.operation-day-card--horizontal {
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  max-width: none;
-  padding: 20px 24px;
-}
-
 .operation-day-header {
   margin-bottom: 16px;
-  flex-shrink: 0;
-  min-width: 140px;
-}
-
-.operation-day-card--horizontal .operation-day-header {
-  margin-bottom: 0;
-  margin-right: 24px;
-}
-
-.operation-day-times--horizontal {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px 24px;
-  flex: 1;
-  min-width: 0;
-}
-
-.operation-day-time-item {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-width: 110px;
-}
-
-.operation-day-card--horizontal .operation-day-time-item {
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-
-.operation-day-label {
-  font-size: 0.9rem;
-  color: #4a5568;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.operation-day-card--horizontal .operation-day-label {
-  font-size: 0.95rem;
-}
-
-.operation-day-value {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #2b6cb0;
-  font-family: 'Courier New', monospace;
-  margin-top: 4px;
-}
-
-.operation-day-card--horizontal .operation-day-value {
-  margin-top: 0;
-  font-size: 1.15rem;
+  margin-right: 30px;
 }
 
 .operation-day-title {
@@ -123,31 +48,85 @@
   font-style: italic;
 }
 
+.operation-day-shifts {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.operation-day-shifts--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.operation-day-shift-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  flex: 1;
+}
+
+.operation-day-shifts--horizontal .operation-day-shift-item {
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 300px;
+}
+
+.operation-day-shift-badge {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid #bae6fd;
+}
+
+.operation-day-times {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.operation-day-times--horizontal {
+  flex-direction: row;
+}
+
+.operation-day-time-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.operation-day-label {
+  font-size: 0.9rem;
+  color: #4a5568;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.operation-day-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2b6cb0;
+  font-family: 'Courier New', monospace;
+  text-align: right;
+  min-width: 60px;
+}
 
 @media (max-width: 768px) {
-  .operation-day-card--horizontal {
+  .operation-day-shifts--horizontal {
     flex-direction: column;
-    padding: 24px;
+    gap: 16px;
   }
 
-  .operation-day-card--horizontal .operation-day-header {
-    margin-right: 0;
-    margin-bottom: 16px;
-  }
-
-  .operation-day-times--horizontal {
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .operation-day-card--horizontal .operation-day-time-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-
-  .operation-day-card--horizontal .operation-day-value {
-    margin-top: 4px;
+  .operation-day-shift-item {
+    min-width: 100%;
   }
 }
 
@@ -162,5 +141,10 @@
 
   .operation-day-value {
     font-size: 1rem;
+  }
+
+  .operation-day-shift-badge {
+    font-size: 0.9rem;
+    padding: 3px 10px;
   }
 }
