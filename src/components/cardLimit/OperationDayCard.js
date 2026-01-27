@@ -17,7 +17,7 @@ const OperationDayCard = ({
     return timeStr.slice(0, 5);
   };
 
-  const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  const dayNames = ['', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
   const uniqueDays = [...new Set(data.map(item => item.AGV_OPERATION_DAY.DAY))];
 

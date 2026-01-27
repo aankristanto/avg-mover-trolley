@@ -175,6 +175,7 @@ const DefaultPage = () => {
             setFirstSetup(true)
             getListStation();
         }
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -187,6 +188,7 @@ const DefaultPage = () => {
         }, 5000);
 
         return () => clearInterval(interval);
+        // eslint-disable-next-line
     }, [SelectedStation.STATION]);
 
 
