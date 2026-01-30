@@ -1,0 +1,87 @@
+/* NoInternet.css */
+.no-internet-container {
+  height: 80vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.no-internet-img {
+  position: relative;
+  width: 480px;
+}
+
+.no-internet-icon {
+  position: relative;
+  width: 100px;
+  height: 50px;
+  background: #e0e0e0;
+  border-radius: 25px;
+  margin-bottom: 20px;
+}
+
+.no-internet-icon::after {
+  content: '';
+  position: absolute;
+  left: -50px;
+  top: 25px;
+  width: 50px;
+  height: 5px;
+  background: #e0e0e0;
+  border-radius: 2.5px;
+}
+
+.no-internet-icon-2 {
+  position: relative;
+  width: 80px;
+  height: 60px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.no-internet-icon-2::after {
+  content: '';
+  position: absolute;
+  right: -50px;
+  top: 30px;
+  width: 50px;
+  height: 5px;
+  background: #e0e0e0;
+  border-radius: 2.5px;
+}
+
+.no-internet-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333333;
+  margin: 0 0 10px;
+}
+
+.no-internet-subtitle {
+  font-size: 16px;
+  color: #666666;
+  margin: 0 0 30px;
+  max-width: 500px;
+}
+
+.no-internet-button {
+  background-color: #2a7fff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.no-internet-button:hover {
+  background-color: #1a66e0;
+}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState }  from "react";
 import { Container, Col, Row, Card, Table, Button } from "react-bootstrap";
-import TitleHeader from "../../TitleHeader";
+import TitleHeader from "../TitleHeader";
 import { useSearchParams } from "react-router-dom";
-import axios from "../../api/api.js";
+import axios from "../api/api.js";
 import { FaLocationArrow, FaMapSigns, FaShoppingCart } from "react-icons/fa";
 
 

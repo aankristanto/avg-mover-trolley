@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
-import DefaultPage from './components/pages/DefaultPage';
-import RequestEmptyTrolleyPage from './components/pages/RequestEmptyTrolleyPage';
+import DefaultPage from './pages/DefaultPage';
+import RequestEmptyTrolleyPage from './pages/RequestEmptyTrolleyPage';
 
 function App() {
   return (
