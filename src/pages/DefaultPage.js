@@ -385,7 +385,7 @@ const DefaultPage = () => {
                                                 </Card.Body>
                                             </Card>
                                         </Col>
-                                        <Col sm={12} className="mt-3">
+                                        {/* <Col sm={12} className="mt-3">
                                             <Card>
                                                 <Card.Header>
                                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -437,7 +437,7 @@ const DefaultPage = () => {
                                                     </div>
                                                 </Card.Body>
                                             </Card>
-                                        </Col>
+                                        </Col> */}
 
                                         <Col sm={12} className="my-3">
                                             {LogStationList.DESTINATION_STATUS && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
