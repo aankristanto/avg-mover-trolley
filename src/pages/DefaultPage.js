@@ -23,6 +23,7 @@ const DefaultPage = () => {
     const [loading2, setLoading2] = useState(false)
     const [StationList, setStationList] = useState([]);
     const [LogStationList, setLogStationList] = useState({});
+    // eslint-disable-next-line
     const [listSewingOut, setListSewingOut] = useState([]);
     const [LogHistory, setLogHistory] = useState([]);
     const [todayData, setTodayData] = useState(null);
@@ -440,7 +441,8 @@ const DefaultPage = () => {
                                         </Col> */}
 
                                         <Col sm={12} className="my-3">
-                                            {LogStationList.DESTINATION_STATUS && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
+                                            {LogStationList.DESTINATION_STATUS &&  !!LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
+                                            {LogStationList.DESTINATION_STATUS &&  !LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="secondary" disabled style={{ width: '100%' }}>Waiting AGV move trolley to Finished Goods</Button>}
                                         </Col>
                                     </>) :
                                     <>
