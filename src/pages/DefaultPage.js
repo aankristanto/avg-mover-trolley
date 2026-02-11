@@ -154,19 +154,19 @@ const DefaultPage = () => {
         }
     }
 
-    const formatDate = (date) => {
+    // const formatDate = (date) => {
 
 
-        const dateFormatter = new Intl.DateTimeFormat('id-ID', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
+    //     const dateFormatter = new Intl.DateTimeFormat('id-ID', {
+    //         day: 'numeric',
+    //         month: 'long',
+    //         year: 'numeric'
+    //     });
 
 
-        const formattedDate = dateFormatter.format(date);
-        return formattedDate
-    }
+    //     const formattedDate = dateFormatter.format(date);
+    //     return formattedDate
+    // }
 
     useEffect(() => {
         const strg = localStorage.getItem('default_key')
