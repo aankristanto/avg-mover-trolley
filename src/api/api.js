@@ -8,7 +8,7 @@ const instance = axios.create({
   withCredentials: true,
   baseURL: `https://api.sumbiri.com/agv`,
   // baseURL: `http://${theUrl}:5001/agv`,
-  timeout: 9000
+  timeout: 8500
 });
 
 instance.interceptors.request.use(
