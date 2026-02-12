@@ -9,6 +9,8 @@ import moment from "moment";
 import OperationDayCard from "../components/cardLimit/OperationDayCard.js";
 import Loading from "../components/loading/Loading.js";
 import NoInternet from "../components/internet/NoInternet.js";
+import WaitingPickup from "../components/waitingPickup/WaitingPickup.js";
+import NoTrolleyAvailable from "../components/noTrolley/NoTrolleyAvailable.js";
 
 const DefaultPage = () => {
     const [SelectedStation, setSelectedStation] = useState({
@@ -155,7 +157,6 @@ const DefaultPage = () => {
     }
 
     // const formatDate = (date) => {
-
 
     //     const dateFormatter = new Intl.DateTimeFormat('id-ID', {
     //         day: 'numeric',
@@ -353,7 +354,6 @@ const DefaultPage = () => {
                                                 <Card.Body>
                                                     <Row>
                                                         <Col sm={12} className="mb-3">
-
                                                             <Card>
                                                                 <Card.Body>
                                                                     <Row>
@@ -361,23 +361,24 @@ const DefaultPage = () => {
                                                                         <Col sm={6}><strong>Schedule Date:</strong> {LogStationList?.TROLLEY?.SCHEDULE_DATE || ''}</Col>
                                                                     </Row>
                                                                     <Row className="mt-4">
-                                                                        <Col sm={6}>
-                                                                            <div className="d-grid gap-2" style={{ height: '30vh' }}>
-                                                                                <Button variant="primary" size="lg" disabled={LogStationList.ORIGIN_STATUS}>
-                                                                                    {LogStationList.ORIGIN_STATUS ? <FaCheck /> : ""}
-                                                                                </Button>
-                                                                            </div>
-                                                                            <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Loading</p>
-                                                                        </Col>
-                                                                        <Col sm={6}>
-                                                                            <div className="d-grid gap-2" style={{ height: '30vh' }}>
-                                                                                <Button variant="danger" size="lg" disabled={LogStationList.DESTINATION_STATUS} onClick={ClickMoveTrolley}>
-                                                                                    {LogStationList.DESTINATION_STATUS ? <FaCheck /> : ""}
-                                                                                </Button>
-
-                                                                            </div>
-                                                                            <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Finish Good</p>
-                                                                        </Col>
+                                                                        {alreadyPickup ? <WaitingPickup /> : <>
+                                                                            <Col sm={6}>
+                                                                                <div className="d-grid gap-2" style={{ height: '30vh' }}>
+                                                                                    <Button variant="primary" size="lg" disabled={LogStationList.ORIGIN_STATUS}>
+                                                                                        {LogStationList.ORIGIN_STATUS ? <FaCheck /> : ""}
+                                                                                    </Button>
+                                                                                </div>
+                                                                                <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Loading</p>
+                                                                            </Col>
+                                                                            <Col sm={6}>
+                                                                                <div className="d-grid gap-2" style={{ height: '30vh' }}>
+                                                                                    <Button variant="danger" size="lg" disabled={LogStationList.DESTINATION_STATUS} onClick={ClickMoveTrolley}>
+                                                                                        {LogStationList.DESTINATION_STATUS ? <FaCheck /> : ""}
+                                                                                    </Button>
+                                                                                </div>
+                                                                                <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Finish Good</p>
+                                                                            </Col>
+                                                                        </>}
                                                                     </Row>
                                                                 </Card.Body>
                                                             </Card>
@@ -441,13 +442,13 @@ const DefaultPage = () => {
                                         </Col> */}
 
                                         <Col sm={12} className="my-3">
-                                            {LogStationList.DESTINATION_STATUS &&  !!LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
-                                            {LogStationList.DESTINATION_STATUS &&  !LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="secondary" disabled style={{ width: '100%' }}>Waiting AGV move trolley to Finished Goods</Button>}
+                                            {LogStationList.DESTINATION_STATUS && !!LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
+                                            {LogStationList.DESTINATION_STATUS && !LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="secondary" disabled style={{ width: '100%' }}>Waiting AGV move trolley to Finished Goods</Button>}
                                         </Col>
                                     </>) :
                                     <>
                                         <Col sm={12}>
-                                            <h2 className="text-center" style={{ marginTop: '50px' }}>No trolley available</h2>
+                                            <NoTrolleyAvailable />
                                         </Col>
                                         <Col sm={12} className="mt-3">
                                             <Card>
@@ -470,7 +471,6 @@ const DefaultPage = () => {
                                                 <Card.Body>
                                                     <Row>
                                                         <Col sm={12} md={4} lg={3}>
-
                                                         </Col>
                                                     </Row>
                                                     <Row>
@@ -513,8 +513,6 @@ const DefaultPage = () => {
                                     </>
                                 }
                             </Row>
-
-
                         }
                     </Container>
             }
