@@ -257,7 +257,6 @@ const DefaultPage = () => {
 
             {loadingMain && <Loading />}
 
-
             {
                 failedPage ? <NoInternet /> :
                     <Container fluid>
@@ -302,11 +301,7 @@ const DefaultPage = () => {
                                 </Col>
                             </Row> : <Row>
                                 <Col sm={12} className="mt-3">
-                                    <OperationDayCard
-                                        data={todayData}
-                                        showEndTime={true}
-                                    />
-                                    <div className="station-card">
+                                    <div className="station-card mb-4">
                                         <div className="station-header">
                                             <div className="station-id">{LogStationList?.STATION?.STATION_ID} | {LogStationList?.STATION?.STATION_NAME}</div>
                                             <span className="station-location-badge">{LogStationList?.STATION?.STATION_LOCATION}</span>
@@ -344,11 +339,14 @@ const DefaultPage = () => {
                                             </div>
                                         </div>
                                     </div>
+                                     <OperationDayCard
+                                        data={todayData}
+                                        showEndTime={true}
+                                    />
                                 </Col>
                                 {LogStationList.TROLLEY_ID ? (
-
                                     <>
-                                        <Col sm={12} className="mt-3">
+                                        <Col sm={12} className="mt-2">
                                             <Card>
                                                 <Card.Header ><Card.Title>Trolley at Selected Station</Card.Title></Card.Header>
                                                 <Card.Body>
