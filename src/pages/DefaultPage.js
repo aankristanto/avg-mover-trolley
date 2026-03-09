@@ -199,8 +199,8 @@ const DefaultPage = () => {
     }, [SelectedStation.STATION]);
 
 
-    const getStatusClass = (status) => (status === 1 ? "station-status-active" : "station-status-inactive");
-    const getStatusText = (status) => (status === 1 ? "Active" : "Inactive");
+    // const getStatusClass = (status) => (status === 1 ? "station-status-active" : "station-status-inactive");
+    // const getStatusText = (status) => (status === 1 ? "Active" : "Inactive");
 
 
     const postRequestTrolley = async () => {
@@ -312,19 +312,13 @@ const DefaultPage = () => {
                                                 <span className="station-detail-label">Station B ID</span>
                                                 <span className="station-detail-value">{LogStationList?.STATION?.STATION_B_ID}</span>
                                             </div>
-
-                                            <div className="station-detail-item">
-                                                <span className="station-detail-label">Staging ID</span>
-                                                <span className="station-detail-value">{LogStationList?.STATION?.STAGING_ID}</span>
-                                            </div>
-
                                             <div className="station-detail-item">
                                                 <span className="station-detail-label">Site</span>
                                                 <span className="station-site-name">{LogStationList?.STATION?.SITE_NAME}</span>
                                             </div>
                                         </div>
 
-                                        <div className="station-status-row">
+                                        {/* <div className="station-status-row">
                                             <div className={`station-status-item ${getStatusClass(LogStationList?.STATION?.STATION_STATUS)}`}>
                                                 <span className="station-status-dot"></span>
                                                 Station: {getStatusText(LogStationList?.STATION?.STATION_STATUS)}
@@ -337,7 +331,7 @@ const DefaultPage = () => {
                                                 <span className="station-status-dot"></span>
                                                 Drop: {getStatusText(LogStationList?.STATION?.STATION_DROP_STATUS)}
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                      <OperationDayCard
                                         data={todayData}
@@ -374,7 +368,7 @@ const DefaultPage = () => {
                                                                                         {LogStationList.DESTINATION_STATUS ? <FaCheck /> : ""}
                                                                                     </Button>
                                                                                 </div>
-                                                                                <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Finish Good</p>
+                                                                                <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Finished Goods</p>
                                                                             </Col>
                                                                         </>}
                                                                     </Row>
@@ -441,7 +435,7 @@ const DefaultPage = () => {
 
                                         <Col sm={12} className="my-3">
                                             {LogStationList.DESTINATION_STATUS && !!LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
-                                            {LogStationList.DESTINATION_STATUS && !LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="secondary" disabled style={{ width: '100%' }}>Waiting AGV move trolley to Finished Goods</Button>}
+                                            {LogStationList.DESTINATION_STATUS && !LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="secondary" disabled style={{ width: '100%' }}>Waiting AGV move trolley to Red</Button>}
                                         </Col>
                                     </>) :
                                     <>

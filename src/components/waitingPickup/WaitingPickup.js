@@ -6,11 +6,11 @@ const WaitingPickup = () => {
         <div className="waiting-agv-container">
             <div className="waiting-agv-card">
                 <div className="waiting-icon">🚚</div>
-                <h4 className="waiting-title">Menunggu AGV</h4>
+                <h4 className="waiting-title">Menunggu diangkut</h4>
                 <p className="waiting-message">
-                    Trolley ini sedang menunggu diangkut oleh AGV.
+                    Trolley ini sedang menunggu diangkut oleh AGV
                     <br />
-                    <strong>Setelah diangkut, trolley ini akan otomatis hilang dari daftar dan ganti trolley di Finished Goods kalau ada.</strong>
+                    <strong>Setelah ambil agv, trolley ini akan otomatis hilang dari daftar. terus ganti trolley di Biru kalau ada.</strong>
                 </p>
             </div>
         </div>

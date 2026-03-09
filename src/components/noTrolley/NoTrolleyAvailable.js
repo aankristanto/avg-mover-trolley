@@ -8,7 +8,7 @@ const NoTrolleyAvailable = () => {
                 <div className="no-trolley-icon">📭</div>
                 <h3 className="no-trolley-title">Trolley Tidak Tersedia</h3>
                 <p className="no-trolley-message">
-                    Saat ini tidak ada trolley aktif yang menunggu pengangkutan oleh AGV.
+                    Saat ini tidak ada trolley aktif di station ini
                 </p>
                 <div className="no-trolley-hint">
                     <small>Trolley akan muncul otomatis setelah proses staging selesai.</small>
