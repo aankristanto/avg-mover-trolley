@@ -11,6 +11,7 @@ import Loading from "../components/loading/Loading.js";
 import NoInternet from "../components/internet/NoInternet.js";
 import WaitingPickup from "../components/waitingPickup/WaitingPickup.js";
 import NoTrolleyAvailable from "../components/noTrolley/NoTrolleyAvailable.js";
+import FeedbackModal from "../components/modal/FeedbackModal.js";
 
 const DefaultPage = () => {
     const [SelectedStation, setSelectedStation] = useState({
@@ -19,12 +20,15 @@ const DefaultPage = () => {
         STATION: "",
         LIST_STATION: [],
     });
+    const [modalFeedback, setModalFeedback] = useState(false)
+
     const [firstSetup, setFirstSetup] = useState(false)
     const [alreadyPickup, setAlreadyPickup] = useState(false)
     const [loadingMain, setLoadingMain] = useState(false)
     const [loading2, setLoading2] = useState(false)
     const [StationList, setStationList] = useState([]);
     const [LogStationList, setLogStationList] = useState({});
+
     // eslint-disable-next-line
     const [listSewingOut, setListSewingOut] = useState([]);
     const [LogHistory, setLogHistory] = useState([]);
@@ -254,6 +258,7 @@ const DefaultPage = () => {
         <div>
             <TitleHeader title="AGV Mover Trolley" />
             <br />
+            {modalFeedback && <FeedbackModal show={true} handleClose={() => setModalFeedback(false)} stationId={LogStationList?.STATION?.STATION_ID} />}
 
             {loadingMain && <Loading />}
 
@@ -304,7 +309,7 @@ const DefaultPage = () => {
                                     <div className="station-card mb-4">
                                         <div className="station-header">
                                             <div className="station-id">{LogStationList?.STATION?.STATION_ID} | {LogStationList?.STATION?.STATION_NAME}</div>
-                                            <span className="station-location-badge">{LogStationList?.STATION?.STATION_LOCATION}</span>
+                                            <Button size="md" variant="warning" onClick={() => setModalFeedback(true)}>Bantuan sistem</Button>
                                         </div>
 
                                         <div className="station-details">
