@@ -134,7 +134,7 @@ const FeedbackModal = ({ show, stationId, handleClose }) => {
                                         as="textarea"
                                         rows={5}
                                         className="aduan-modal-textarea"
-                                        placeholder="Contoh: Tidak bisa nyalain downtime, muncul pesan error seperti ini ..."
+                                        placeholder="Contoh: Trolley gak di ambil agv dari tadi, padahal saat kirim request success ..."
                                         value={complaintText}
                                         onChange={(e) => setComplaintText(e.target.value)}
                                     />
