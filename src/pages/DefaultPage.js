@@ -258,7 +258,7 @@ const DefaultPage = () => {
         <div>
             <TitleHeader title="AGV Mover Trolley" />
             <br />
-            {modalFeedback && <FeedbackModal show={true} handleClose={() => setModalFeedback(false)} stationId={LogStationList?.STATION?.STATION_ID} />}
+            {modalFeedback && <FeedbackModal show={true} handleClose={() => setModalFeedback(false)} stationId={LogStationList?.STATION?.STATION_ID || ''} stationName={LogStationList?.STATION?.STATION_NAME || ''} siteName={LogStationList?.STATION?.SITE_NAME || ''} />}
 
             {loadingMain && <Loading />}
 

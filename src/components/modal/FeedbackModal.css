@@ -9,7 +9,6 @@
 .aduan-modal-header {
   background-color: #f8f9fa;
   border-bottom: 1px solid #e9ecef;
-  padding: 1.5rem;
 }
 
 .aduan-modal-title {
@@ -156,71 +155,77 @@
 }
 
 
-.modal-aduan-history .history-list {
-    max-height: 60vh;
+.aduan-modal-form-container .history-list {
+    height: 45vh;
     overflow-y: auto;
     padding-right: 0.5rem;
+    position: relative;
+}
+.message-rwyt {
+    text-align: center;
+    margin: 10px 0;
+    border-bottom: 2px solid gray;
 }
 
-.modal-aduan-history .history-list::-webkit-scrollbar {
+.aduan-modal-form-container .history-list::-webkit-scrollbar {
     width: 6px;
 }
 
-.modal-aduan-history .history-list::-webkit-scrollbar-track {
+.aduan-modal-form-container .history-list::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
 
-.modal-aduan-history .history-list::-webkit-scrollbar-thumb {
+.aduan-modal-form-container .history-list::-webkit-scrollbar-thumb {
     background: #c1c1c1;
     border-radius: 10px;
 }
 
-.modal-aduan-history .history-list::-webkit-scrollbar-thumb:hover {
+.aduan-modal-form-container .history-list::-webkit-scrollbar-thumb:hover {
     background: #a1a1a1;
 }
 
 
-.modal-aduan-history .history-item {
+.aduan-modal-form-container .history-item {
     background: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 10px;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     margin-bottom: 0.75rem;
     transition: all 0.2s ease;
     cursor: pointer;
     border-left: 4px solid transparent;
 }
 
-.modal-aduan-history .history-item:hover {
+.aduan-modal-form-container .history-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-color: rgba(0, 0, 0, 0.15);
 }
 
-.modal-aduan-history .history-item.approved {
+.aduan-modal-form-container .history-item.approved {
     border-left-color: #28a745;
 }
 
-.modal-aduan-history .history-item.rejected {
+.aduan-modal-form-container .history-item.rejected {
     border-left-color: #dc3545;
 }
 
-.modal-aduan-history .history-item.pending {
+.aduan-modal-form-container .history-item.pending {
     border-left-color: #ffc107;
 }
 
 
-.modal-aduan-history .history-header {
+.aduan-modal-form-container .history-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 0.5rem;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.modal-aduan-history .app-name {
+.aduan-modal-form-container .app-name {
     font-weight: 600;
     font-size: 0.95rem;
     color: #2c3e50;
@@ -229,7 +234,7 @@
     gap: 0.4rem;
 }
 
-.modal-aduan-history .app-name::before {
+.aduan-modal-form-container .app-name::before {
     content: '';
     display: inline-block;
     width: 8px;
@@ -238,7 +243,7 @@
     background: #3498db;
 }
 
-.modal-aduan-history .history-meta {
+.aduan-modal-form-container .history-meta {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -246,14 +251,14 @@
     color: #6c757d;
 }
 
-.modal-aduan-history .history-meta span {
+.aduan-modal-form-container .history-meta span {
     display: flex;
     align-items: center;
     gap: 0.3rem;
 }
 
 
-.modal-aduan-history .status-badge {
+.aduan-modal-form-container .status-badge {
     font-size: 0.75rem;
     font-weight: 600;
     padding: 0.35rem 0.75rem;
@@ -263,27 +268,26 @@
     letter-spacing: 0.3px;
 }
 
-.modal-aduan-history .status-badge.approved {
+.aduan-modal-form-container .status-badge.approved {
     background: rgba(40, 167, 69, 0.15);
     color: #28a745;
 }
 
-.modal-aduan-history .status-badge.rejected {
+.aduan-modal-form-container .status-badge.rejected {
     background: rgba(220, 53, 69, 0.15);
     color: #dc3545;
 }
 
-.modal-aduan-history .status-badge.pending {
+.aduan-modal-form-container .status-badge.pending {
     background: rgba(255, 193, 7, 0.15);
     color: #856404;
 }
 
 
-.modal-aduan-history .history-body {
-    margin: 1rem 0;
+.aduan-modal-form-container .history-body {
 }
 
-.modal-aduan-history .history-body p {
+.aduan-modal-form-container .history-body p {
     margin: 0;
     font-size: 0.9rem;
     color: #495057;
@@ -294,7 +298,7 @@
     overflow: hidden;
 }
 
-.modal-aduan-history .important-flag {
+.aduan-modal-form-container .important-flag {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
@@ -305,29 +309,27 @@
 }
 
 
-.modal-aduan-history .history-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.aduan-modal-form-container .history-footer {
     padding-top: 0.75rem;
     border-top: 1px dashed rgba(0, 0, 0, 0.08);
     margin-top: 0.5rem;
     font-size: 0.8rem;
 }
 
-.modal-aduan-history .response-info {
+.aduan-modal-form-container .response-info {
     color: #6c757d;
     display: flex;
+    margin-top: 10px;
     align-items: center;
     gap: 0.4rem;
 }
 
-.modal-aduan-history .response-info .responder {
+.aduan-modal-form-container .response-info .responder {
     font-weight: 600;
     color: #2c3e50;
 }
 
-.modal-aduan-history .feedback-preview {
+.aduan-modal-form-container .feedback-preview {
     font-style: italic;
     color: #495057;
     max-width: 200px;
@@ -337,25 +339,25 @@
 }
 
 
-.modal-aduan-history .empty-state {
+.aduan-modal-form-container .empty-state {
     text-align: center;
     padding: 3rem 1rem;
     color: #6c757d;
 }
 
-.modal-aduan-history .empty-state-icon {
+.aduan-modal-form-container .empty-state-icon {
     font-size: 3rem;
     margin-bottom: 1rem;
     opacity: 0.5;
 }
 
-.modal-aduan-history .empty-state p {
+.aduan-modal-form-container .empty-state p {
     margin: 0;
     font-size: 0.95rem;
 }
 
 
-.modal-aduan-history .level-indicator {
+.aduan-modal-form-container .level-indicator {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
@@ -367,12 +369,12 @@
     color: #495057;
 }
 
-.modal-aduan-history .level-indicator.high {
+.aduan-modal-form-container .level-indicator.high {
     background: rgba(255, 193, 7, 0.2);
     color: #856404;
 }
 
-.modal-aduan-history .level-indicator.critical {
+.aduan-modal-form-container .level-indicator.critical {
     background: rgba(220, 53, 69, 0.2);
     color: #dc3545;
 }
@@ -390,7 +392,7 @@
         gap: 0.5rem;
     }
     
-    .modal-aduan-history .feedback-preview {
+    .aduan-modal-form-container .feedback-preview {
         max-width: 100%;
     }
 }
