@@ -213,7 +213,7 @@ const FeedbackModal = ({ show, stationId, siteName, stationName, handleClose }) 
 
                                             </div>
                                             <div className="history-body">
-                                                <p title={item.BODY}>{item.BODY}</p>
+                                                <p title={item.BODY} style={{ whiteSpace: 'pre-wrap' }}>{item.BODY}</p>
                                             </div>
                                             {item.IS_APPROVE !== null ? (
                                                 <div className="history-footer">
