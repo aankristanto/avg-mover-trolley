@@ -110,3 +110,21 @@ code {
   color: #2b6cb0;
   font-size: 0.95rem;
 }
+
+.line-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.line-tag {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 4px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}

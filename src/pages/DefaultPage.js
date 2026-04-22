@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Col, Row, Form, Card, Button, Table } from "react-bootstrap";
 import TitleHeader from "../TitleHeader.js";
 import axios from "../api/api.js";
-import { FaCheck, FaLocationArrow } from "react-icons/fa";
+import { FaCalendarAlt, FaCheck, FaLocationArrow } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import moment from "moment";
@@ -27,7 +27,7 @@ const DefaultPage = () => {
     const [loadingMain, setLoadingMain] = useState(false)
     const [loading2, setLoading2] = useState(false)
     const [StationList, setStationList] = useState([]);
-    const [LogStationList, setLogStationList] = useState({});
+    const [LogStationList, setLogStationList] = useState({ LIST_LINE: [] });
 
     // eslint-disable-next-line
     const [listSewingOut, setListSewingOut] = useState([]);
@@ -71,6 +71,7 @@ const DefaultPage = () => {
                 TROLLEY_ID: data?.TROLLEY?.TROLLEY_ID,
                 TROLLEY: data.TROLLEY,
                 STATION: data.STATION,
+                LIST_LINE: data?.LIST_LINE || [],
                 ORIGIN_STATUS: data.IS_SEWING_IN,
                 DESTINATION_STATUS: data.IS_SEWING_OUT
             });
@@ -321,6 +322,16 @@ const DefaultPage = () => {
                                                 <span className="station-detail-label">Site</span>
                                                 <span className="station-site-name">{LogStationList?.STATION?.SITE_NAME}</span>
                                             </div>
+                                            <div className="station-detail-item">
+                                                <span className="station-detail-label">List Line:</span>
+                                                <div className="line-tags">
+                                                    {LogStationList.LIST_LINE.map((line) => (
+                                                        <span key={line.ID} className="line-tag">
+                                                            {LogStationList?.STATION?.STATION_ID === 'STS00008' ? `${line?.SITELINE?.SITE_NAME} - ${line?.SITELINE?.LINE_NAME}` : line?.SITELINE?.LINE_NAME || ''}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
                                         </div>
 
                                         {/* <div className="station-status-row">
@@ -338,7 +349,7 @@ const DefaultPage = () => {
                                             </div>
                                         </div> */}
                                     </div>
-                                     <OperationDayCard
+                                    <OperationDayCard
                                         data={todayData}
                                         showEndTime={true}
                                     />
@@ -352,30 +363,43 @@ const DefaultPage = () => {
                                                     <Row>
                                                         <Col sm={12} className="mb-3">
                                                             <Card>
-                                                                <Card.Body>
-                                                                    <Row>
-                                                                        <Col sm={6}><strong>Trolley:</strong> {LogStationList?.TROLLEY?.MASTER_TROLLEY_ID || ''}</Col>
-                                                                        <Col sm={6}><strong>Schedule Date:</strong> {LogStationList?.TROLLEY?.SCHEDULE_DATE || ''}</Col>
-                                                                    </Row>
+                                                                <Card.Body className="p-4" style={{ position: 'relative' }}>
+                                                                    <div className="text-center mb-4 p-3 bg-light rounded border">
+                                                                        <h6 className="text-muted text-uppercase small fw-bold mb-2">Trolley Code:</h6>
+                                                                        <h1 className="display-4 fw-bold text-primary mb-0">
+                                                                            {LogStationList?.TROLLEY?.MASTER_TROLLEY_ID || '-'}
+                                                                        </h1>
+                                                                        <span className="badge bg-secondary fs-6" style={{ position: 'absolute', top: 10, right: 10 }}>
+                                                                            <FaCalendarAlt className="me-1" />
+                                                                            Schedule: {LogStationList?.TROLLEY?.SCHEDULE_DATE || '-'}
+                                                                        </span>
+                                                                    </div>
+
                                                                     <Row className="mt-4">
-                                                                        {alreadyPickup ? <WaitingPickup /> : <>
-                                                                            <Col sm={6}>
-                                                                                <div className="d-grid gap-2" style={{ height: '30vh' }}>
-                                                                                    <Button variant="primary" size="lg" disabled={LogStationList.ORIGIN_STATUS}>
-                                                                                        {LogStationList.ORIGIN_STATUS ? <FaCheck /> : ""}
-                                                                                    </Button>
-                                                                                </div>
-                                                                                <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Loading</p>
+                                                                        {alreadyPickup ? (
+                                                                            <Col xs={12} className="text-center">
+                                                                                <WaitingPickup />
                                                                             </Col>
-                                                                            <Col sm={6}>
-                                                                                <div className="d-grid gap-2" style={{ height: '30vh' }}>
-                                                                                    <Button variant="danger" size="lg" disabled={LogStationList.DESTINATION_STATUS} onClick={ClickMoveTrolley}>
-                                                                                        {LogStationList.DESTINATION_STATUS ? <FaCheck /> : ""}
-                                                                                    </Button>
-                                                                                </div>
-                                                                                <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Finished Goods</p>
-                                                                            </Col>
-                                                                        </>}
+                                                                        ) : (
+                                                                            <>
+                                                                                <Col sm={6}>
+                                                                                    <div className="d-grid gap-2" style={{ height: '30vh' }}>
+                                                                                        <Button variant="primary" size="lg" disabled={LogStationList.ORIGIN_STATUS}>
+                                                                                            {LogStationList.ORIGIN_STATUS ? <FaCheck /> : ""}
+                                                                                        </Button>
+                                                                                    </div>
+                                                                                    <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Loading</p>
+                                                                                </Col>
+                                                                                <Col sm={6}>
+                                                                                    <div className="d-grid gap-2" style={{ height: '30vh' }}>
+                                                                                        <Button variant="danger" size="lg" disabled={LogStationList.DESTINATION_STATUS} onClick={ClickMoveTrolley}>
+                                                                                            {LogStationList.DESTINATION_STATUS ? <FaCheck /> : ""}
+                                                                                        </Button>
+                                                                                    </div>
+                                                                                    <p className="text-center my-0 mt-2" style={{ color: 'gray', fontSize: 13 }}>Finished Goods</p>
+                                                                                </Col>
+                                                                            </>
+                                                                        )}
                                                                     </Row>
                                                                 </Card.Body>
                                                             </Card>
@@ -384,6 +408,7 @@ const DefaultPage = () => {
                                                 </Card.Body>
                                             </Card>
                                         </Col>
+
                                         {/* <Col sm={12} className="mt-3">
                                             <Card>
                                                 <Card.Header>
