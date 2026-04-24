@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Col, Row, Form, Card, Button, Table } from "react-bootstrap";
 import TitleHeader from "../TitleHeader.js";
 import axios from "../api/api.js";
-import { FaCalendarAlt, FaCheck, FaLocationArrow } from "react-icons/fa";
+import { FaCalendarAlt, FaCheck, FaClock, FaExclamationTriangle, FaLocationArrow } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import moment from "moment";
@@ -34,6 +34,11 @@ const DefaultPage = () => {
     const [LogHistory, setLogHistory] = useState([]);
     const [todayData, setTodayData] = useState(null);
     const [failedPage, setFailedPage] = useState(false)
+
+    const formatTime = (dateString) => {
+        if (!dateString) return '-';
+        return moment(dateString).format("HH:mm:ss");
+    };
 
 
     const getListStation = async () => {
@@ -73,7 +78,8 @@ const DefaultPage = () => {
                 STATION: data.STATION,
                 LIST_LINE: data?.LIST_LINE || [],
                 ORIGIN_STATUS: data.IS_SEWING_IN,
-                DESTINATION_STATUS: data.IS_SEWING_OUT
+                DESTINATION_STATUS: data.IS_SEWING_OUT,
+                TROLLEY_PACKING: data.TROLLEY_PACKING
             });
 
             setListSewingOut(data.SEWING_OUT)
@@ -197,8 +203,8 @@ const DefaultPage = () => {
 
         const interval = setInterval(() => {
             getListLogByStation(SelectedStation.STATION);
+            getLogHistoryEmptyTrolleyRequest(moment().format('YYYY-MM-DD'));
         }, 6000);
-
         return () => clearInterval(interval);
         // eslint-disable-next-line
     }, [SelectedStation.STATION]);
@@ -241,15 +247,6 @@ const DefaultPage = () => {
     useEffect(() => {
         getListStation();
         getLogHistoryEmptyTrolleyRequest(moment().format('YYYY-MM-DD'));
-    }, []);
-
-    useEffect(() => {
-
-        const interval = setInterval(() => {
-            getLogHistoryEmptyTrolleyRequest(moment().format('YYYY-MM-DD'));
-        }, 5000);
-
-        return () => clearInterval(interval);
     }, []);
 
 
@@ -377,9 +374,33 @@ const DefaultPage = () => {
 
                                                                     <Row className="mt-4">
                                                                         {alreadyPickup ? (
-                                                                            <Col xs={12} className="text-center">
-                                                                                <WaitingPickup />
-                                                                            </Col>
+                                                                            <>
+                                                                                <Col xs={12} className="text-center">
+                                                                                    <WaitingPickup />
+                                                                                </Col>
+                                                                                {LogStationList?.TROLLEY_PACKING && <div className="trolley-warning-card mt-2">
+                                                                                    <div className="warning-icon-wrapper">
+                                                                                        <FaExclamationTriangle />
+                                                                                    </div>
+                                                                                    <div className="warning-content">
+                                                                                        <h6>Sedang Ada Trolley di Packing!</h6>
+                                                                                        <p>
+                                                                                            Santai aja, request pickup AGV tetap bisa dikirim kok.
+                                                                                            Sistem akan otomatis mengantri sampai trolley saat ini selesai diproses.
+                                                                                        </p>
+                                                                                        <div style={{ marginTop: '8px' }}>
+                                                                                            <span className="trolley-id-badge">
+                                                                                                Kode troli: {LogStationList?.TROLLEY_PACKING?.MASTER_TROLLEY_ID}
+                                                                                            </span>
+
+                                                                                            <span className="warning-timestamp">
+                                                                                                <FaClock />
+                                                                                                Update terakhir: {formatTime(LogStationList?.TROLLEY_PACKING?.updatedAt)}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>}
+                                                                            </>
                                                                         ) : (
                                                                             <>
                                                                                 <Col sm={6}>
@@ -464,7 +485,32 @@ const DefaultPage = () => {
                                         </Col> */}
 
                                         <Col sm={12} className="my-3">
-                                            {LogStationList.DESTINATION_STATUS && !!LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>}
+                                            {(LogStationList.DESTINATION_STATUS && !!LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup) && <>
+                                                {LogStationList?.TROLLEY_PACKING && <div className="trolley-warning-card">
+                                                    <div className="warning-icon-wrapper">
+                                                        <FaExclamationTriangle />
+                                                    </div>
+                                                    <div className="warning-content">
+                                                        <h6>Sedang Ada Trolley di Packing!</h6>
+                                                        <p>
+                                                            Santai aja, request pickup AGV tetap bisa dikirim kok.
+                                                            Sistem akan otomatis mengantri sampai trolley saat ini selesai diproses.
+                                                        </p>
+                                                        <div style={{ marginTop: '8px' }}>
+                                                            <span className="trolley-id-badge">
+                                                                Kode troli: {LogStationList?.TROLLEY_PACKING?.MASTER_TROLLEY_ID}
+                                                            </span>
+
+                                                            <span className="warning-timestamp">
+                                                                <FaClock />
+                                                                Update terakhir: {formatTime(LogStationList?.TROLLEY_PACKING?.updatedAt)}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>}
+                                                <Button className="mt-4" variant="success" style={{ width: '100%' }} onClick={sendToPacking}>Send To Packing</Button>
+                                            </>
+                                            }
                                             {LogStationList.DESTINATION_STATUS && !LogStationList?.TROLLEY?.IS_SEWING_OUT && !alreadyPickup && <Button variant="secondary" disabled style={{ width: '100%' }}>Waiting AGV move trolley to Red</Button>}
                                         </Col>
                                     </>) :
