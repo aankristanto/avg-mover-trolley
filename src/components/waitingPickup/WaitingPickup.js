@@ -10,7 +10,7 @@ const WaitingPickup = () => {
                 <p className="waiting-message">
                     Trolley ini sedang menunggu diangkut oleh AGV
                     <br />
-                    <strong>Setelah ambil agv, trolley ini akan otomatis hilang dari daftar. terus ganti trolley di Biru kalau ada.</strong>
+                    <strong>Setelah diambil agv, trolley ini akan otomatis hilang dari daftar. terus ganti trolley di 'Biru Line' kalau ada.</strong>
                 </p>
             </div>
         </div>

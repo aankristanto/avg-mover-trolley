@@ -37,7 +37,7 @@ const DefaultPage = () => {
 
     const formatTime = (dateString) => {
         if (!dateString) return '-';
-        return moment(dateString).format("HH:mm:ss");
+        return moment(dateString).format("DD-MMM HH:mm");
     };
 
 
@@ -322,7 +322,10 @@ const DefaultPage = () => {
                                             <div className="station-detail-item">
                                                 <span className="station-detail-label">List Line:</span>
                                                 <div className="line-tags">
-                                                    {LogStationList.LIST_LINE.map((line) => (
+                                                    {LogStationList.LIST_LINE.filter((item, index, self) => {
+                                                        const key = `${item.SITELINE.LINE_NAME}`;
+                                                        return self.findIndex(t => `${t.SITELINE.LINE_NAME}` === key) === index;
+                                                    }).map((line) => (
                                                         <span key={line.ID} className="line-tag">
                                                             {LogStationList?.STATION?.STATION_ID === 'STS00008' ? `${line?.SITELINE?.SITE_NAME} - ${line?.SITELINE?.LINE_NAME}` : line?.SITELINE?.LINE_NAME || ''}
                                                         </span>
@@ -386,7 +389,7 @@ const DefaultPage = () => {
                                                                                         <h6>Sedang Ada Trolley di Packing!</h6>
                                                                                         <p>
                                                                                             Santai aja, request pickup AGV tetap bisa dikirim kok.
-                                                                                            Sistem akan otomatis mengantri sampai trolley saat ini selesai diproses.
+                                                                                            Tapi sistem akan otomatis mengantri sampai trolley saat ini selesai diproses:
                                                                                         </p>
                                                                                         <div style={{ marginTop: '8px' }}>
                                                                                             <span className="trolley-id-badge">
@@ -395,7 +398,7 @@ const DefaultPage = () => {
 
                                                                                             <span className="warning-timestamp">
                                                                                                 <FaClock />
-                                                                                                Update terakhir: {formatTime(LogStationList?.TROLLEY_PACKING?.updatedAt)}
+                                                                                                Sampai dipacking pada: {formatTime(LogStationList?.TROLLEY_PACKING?.updatedAt)}
                                                                                             </span>
                                                                                         </div>
                                                                                     </div>
