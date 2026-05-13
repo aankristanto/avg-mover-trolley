@@ -366,7 +366,7 @@ const DefaultPage = () => {
                                                                 <Card.Body className="p-4" style={{ position: 'relative' }}>
                                                                     <div className="text-center mb-4 p-3 bg-light rounded border">
                                                                         <h6 className="text-muted text-uppercase small fw-bold mb-2">Trolley Code:</h6>
-                                                                        <h1 className="display-4 fw-bold text-primary mb-0">
+                                                                        <h1 className={`display-4 fw-bold ${LogStationList?.DESTINATION_STATUS ? 'text-danger' : 'text-primary' } mb-0`}>
                                                                             {LogStationList?.TROLLEY?.MASTER_TROLLEY_ID || '-'}
                                                                         </h1>
                                                                         <span className="badge bg-secondary fs-6" style={{ position: 'absolute', top: 10, right: 10 }}>
